@@ -9,3 +9,8 @@ export async function getProfile() {
   const response = await api.get('/api/');
   return response.data;
 }
+
+export async function getProjects() {
+    const response = await api.get('/api/projects');
+    return response.data;
+}

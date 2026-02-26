@@ -1,22 +1,21 @@
 import { getProfile } from "@/services/api";
 import { Job } from "@/types";
+import Link from "next/link";
 
 export default async function Home() {
   const data = await getProfile();
-  const about = data.about;
-  const experience = data.experience;
   return (
-    <div className="flex flex-col  gap-24 py-19">
+    <div className="flex flex-col  gap-20 py-19">
       <section id="about">
-        {about.paragraphs.map((p: string, i: number) => (
+        {data.about.paragraphs.map((p: string, i: number) => (
           <p key={i} className="text-slate-400 mt-4">{p}</p>
         ))}
       </section>
 
       <section id="experience">
-        {experience.map((job: Job, i: number) => (
+        {data.experience.map((job: Job, i: number) => (
           <div key={i} className="flex gap-8 mb-12">
-            <p className="text-slate-400 text-sm w-40 shrink-0">{job.period}</p>
+            <p className="text-slate-400 text-sm w-40 shrink-0 pt-0.5">{job.period}</p>
 
             <div>
               <h3 className="text-white font-semibold">{job.role} · {job.company}</h3>
@@ -38,6 +37,12 @@ export default async function Home() {
             </div>
           </div>
         ))}
+      </section>
+
+      <section id="projects">
+        <Link href="/projects" className="text-teal-300 flex items-center gap-2 mt-8">
+          View Full Project Archive →
+        </Link>
       </section>
     </div>
   );
