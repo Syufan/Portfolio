@@ -2,6 +2,7 @@ export interface Job {
     period: string;
     company: string;
     role: string;
+    url: string;
     bullets: string[];
     techStack: string[];
 }

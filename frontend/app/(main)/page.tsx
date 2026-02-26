@@ -5,7 +5,7 @@ import Link from "next/link";
 export default async function Home() {
   const data = await getProfile();
   return (
-    <div className="flex flex-col  gap-20 py-19">
+    <div className="flex flex-col  gap-30 py-19">
       <section id="about">
         {data.about.paragraphs.map((p: string, i: number) => (
           <p key={i} className="text-slate-400 mt-4">{p}</p>
@@ -14,11 +14,17 @@ export default async function Home() {
 
       <section id="experience">
         {data.experience.map((job: Job, i: number) => (
-          <div key={i} className="flex gap-8 mb-12">
+          <a key={i}
+            href={job.url}
+            target="_blank"
+            className="flex gap-1 mb-4 p-4 -mx-4 rounded-lg transition-all duration-200 hover:bg-slate-800/50 group">
             <p className="text-slate-400 text-sm w-40 shrink-0 pt-0.5">{job.period}</p>
 
             <div>
-              <h3 className="text-white font-semibold">{job.role} · {job.company}</h3>
+            <h3 className="text-white group-hover:text-teal-300 transition-colors duration-150 flex items-center gap-1">
+              {job.role} · {job.company}
+              <span className="inline-block transition-transform duration-150 group-hover:-translate-y-1 group-hover:translate-x-1">↗</span>
+            </h3>
 
               <ul className="mt-4 flex flex-col gap-2">
               {job.bullets.map((bullet, j) => (
@@ -35,14 +41,19 @@ export default async function Home() {
               </div>
 
             </div>
-          </div>
+          </a>
         ))}
       </section>
 
-      <section id="projects">
-        <Link href="/projects" className="text-teal-300 flex items-center gap-2 mt-8">
-          View Full Project Archive →
-        </Link>
+      <section id="projects" className="-mt-20">
+        <div className="inline-flex">
+          <Link
+            href="/projects"
+            className="text-slate-200 hover:text-teal-300 flex items-center gap-1 transition-colors duration-150 group">
+            View Full Project Archive
+            <span className="inline-block transition-transform duration-150 group-hover:translate-x-2">→</span>
+          </Link>
+        </div>
       </section>
     </div>
   );
