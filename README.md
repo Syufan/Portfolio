@@ -2,12 +2,12 @@
 A personal portfolio website to showcase my projects and technical skills.
 
 ## Tech Stack
-- Frontend: React
+- Frontend: Next.js + TypeScript + Tailwind CSS
 - Backend: Spring Boot
 - Project Data: JSON config file
 
 ## Project Structure
-- `frontend/` — React application
+- `frontend/` — Next.js application
 - `backend/` — Spring Boot application
 
 ## Getting Started
@@ -23,6 +23,6 @@ API runs on `http://localhost:8080`
 ```bash
 cd frontend
 npm install
-npm start
+npm run dev
 ```
 App runs on `http://localhost:3000`
