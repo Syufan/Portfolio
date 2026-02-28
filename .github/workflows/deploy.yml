@@ -28,14 +28,7 @@ jobs:
         with:
           context: ./backend
           push: true
-          tags: ghcr.io/syufan/profile-backend:latest
-
-      - name: Build and push frontend
-        uses: docker/build-push-action@v5
-        with:
-          context: ./frontend
-          push: true
-          tags: ghcr.io/syufan/profile-frontend:latest
+          tags: ghcr.io/syufan/portfolio-backend:latest
 
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v1.0.0
@@ -48,7 +41,7 @@ jobs:
             cat > /home/ubuntu/app/docker-compose.yml << 'EOF'
             services:
               backend:
-                image: ghcr.io/syufan/profile-backend:latest
+                image: ghcr.io/syufan/portfolio-backend:latest
                 ports:
                   - "8080:8080"
                 volumes:
@@ -56,18 +49,9 @@ jobs:
                 environment:
                   - SPRING_PROFILES_ACTIVE=prod
                   - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS}
-              frontend:
-                image: ghcr.io/syufan/profile-frontend:latest
-                ports:
-                  - "3000:3000"
-                environment:
-                  - API_URL=http://backend:8080
-                depends_on:
-                  - backend
             EOF
             echo "CORS_ALLOWED_ORIGINS=${{ secrets.CORS_ALLOWED_ORIGINS }}" > /home/ubuntu/app/.env
-            docker pull ghcr.io/syufan/profile-backend:latest
-            docker pull ghcr.io/syufan/profile-frontend:latest
+            docker pull ghcr.io/syufan/portfolio-backend:latest
             cd /home/ubuntu/app
             docker-compose down
             docker-compose up -d
