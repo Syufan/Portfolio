@@ -43,7 +43,7 @@ jobs:
               backend:
                 image: ghcr.io/syufan/portfolio-backend:latest
                 ports:
-                  - "8080:8080"
+                  - "80:8080"
                 volumes:
                   - /home/ubuntu/data/data.json:/app/data/data.json
                 environment:
