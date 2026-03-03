@@ -23,7 +23,7 @@ export default function NavLinks() {
         ([entry]) => {
           if (entry.isIntersecting) setActive(id);
         },
-        { rootMargin: "-40% 0px -60% 0px" }
+        { rootMargin: "-40% 0px -60% 0px" },
       );
 
       observer.observe(el);
@@ -40,32 +40,32 @@ export default function NavLinks() {
         const isActive = active === id;
 
         return (
-            <a
-                key={id}
-                href={href}
-                onClick={(e) => {
-                    e.preventDefault();
-                    if (id === "about") {
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                    } else {
-                    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-                    }
-                }}
-                className={`flex items-center gap-4 group transition-colors duration-200 ${
-                isActive ? "text-white" : "text-slate-400 hover:text-slate-200"
-                }`}
-            >
-                <span
-                className={`block h-px transition-all duration-150 ${
-                    isActive
-                    ? "w-16 bg-white"
-                    : "w-8 bg-slate-400 group-hover:w-16 group-hover:bg-slate-200"
-                }`}
-                />
-                <span className="text-xs tracking-widest uppercase">
-                {label}
-                </span>
-            </a>
+          <a
+            key={id}
+            href={href}
+            onClick={(e) => {
+              e.preventDefault();
+              if (id === "about") {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              } else {
+                document
+                  .getElementById(id)
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }
+            }}
+            className={`flex items-center gap-4 group transition-colors duration-200 ${
+              isActive ? "text-white" : "text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            <span
+              className={`block h-px transition-all duration-150 ${
+                isActive
+                  ? "w-16 bg-white"
+                  : "w-8 bg-slate-400 group-hover:w-16 group-hover:bg-slate-200"
+              }`}
+            />
+            <span className="text-xs tracking-widest uppercase">{label}</span>
+          </a>
         );
       })}
     </nav>
