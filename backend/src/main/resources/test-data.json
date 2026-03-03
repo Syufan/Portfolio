@@ -2,7 +2,8 @@
     "about": {
       "name": "Test User",
       "title": "Software Engineer",
-      "summary": "Test summary"
+      "tagline": "Test tagline",
+      "paragraphs": ["Test paragraph"]
     },
     "experience": [
       {
@@ -15,7 +16,8 @@
       {
         "name": "Test Project",
         "description": "A test project",
-        "tech": ["Java", "Spring"]
+        "techStack": ["Java", "Spring"],
+        "year": "2024",
+        "url": "https://example.com"
       }
     ]
-  }
