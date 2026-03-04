@@ -1,20 +1,17 @@
-from pathlib import Path
+from fastapi import FastAPI
 
-from fastapi import FastAPI, Request
-from starlette.templating import Jinja2Templates
-from starlette.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
-
+from src.domain.application import Application
 from src.web.routes.chatboat import ChatBoatRoutes
 
 class WebServer:
-    def __init__ (self) -> None:
+    def __init__ (self, application: Application) -> None:
+        self._application = application
         self._app = self._build_fastapi()
 
     def _build_fastapi(self) -> FastAPI:
         app = FastAPI()
 
-        chat_boat_router = ChatBoatRoutes().router()
+        chat_boat_router = ChatBoatRoutes(self._application).router()
         app.include_router(chat_boat_router, prefix="")
 
         return app

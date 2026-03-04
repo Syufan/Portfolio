@@ -1,14 +1,16 @@
 import os
-import sys
 
 import uvicorn
 from dotenv import load_dotenv
 
 from src.web.service import WebServer
+from src.domain.application import Application
 
 def _build_webserver() -> WebServer:
     load_dotenv()
-    return WebServer()
+    db_path = os.getenv("DB_PATH")
+    app = Application(db_path)
+    return WebServer(application=app)
 
 app= _build_webserver().get_app()
 
