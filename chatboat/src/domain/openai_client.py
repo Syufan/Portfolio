@@ -1,15 +1,15 @@
-from typing import Generator
-from openai import OpenAI
+from typing import AsyncGenerator
+from openai import AsyncOpenAI
 
 MODEL_TIMEOUT_SECONDS = 15
 MAX_OUTPUT_TOKENS = 500
 
 class OpenAIClient:
     def __init__(self) -> None:
-        self._client = OpenAI()
+        self._client = AsyncOpenAI()
 
-    def send_message(self, message:str, data:str, history: list) -> Generator[str, None, None]:
-        stream = self._client.chat.completions.create(
+    async def send_message(self, message:str, data:str, history: list) -> AsyncGenerator[str, None]:
+        stream = await self._client.chat.completions.create(
             model="gpt-4o-mini-2024-07-18",
             max_tokens=MAX_OUTPUT_TOKENS,
             timeout=MODEL_TIMEOUT_SECONDS,
@@ -40,7 +40,7 @@ class OpenAIClient:
                 {"role": "user", "content": message}
             ]
         )
-        for chunk in stream:
+        async for chunk in stream:
             delta = chunk.choices[0].delta.content
             if delta:
                 yield delta

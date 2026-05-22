@@ -1,3 +1,5 @@
+import time
+
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 from fastapi.responses import StreamingResponse
@@ -7,6 +9,7 @@ from src.domain.application import Application
 MAX_MESSAGES_PER_IP = 10
 MAX_MESSAGE_LENGTH = 400
 MAX_HISTORY_LENGTH = 8
+RATE_WINDOW_SECONDS = 3600
 
 class ChatRequest(BaseModel):
     message: str
@@ -28,7 +31,7 @@ class ChatBoatRoutes:
     def get_random_suggestions(self) -> dict:
         return {"suggestions": self._application.pick_random_suggestion()}
 
-    def send_message(self, request: Request, body: ChatRequest) -> StreamingResponse:
+    async def send_message(self, request: Request, body: ChatRequest) -> StreamingResponse:
         client_ip = self._get_client_ip(request)
         self._enforce_rate_limit(client_ip)
         self._validate_message(body.message)
@@ -48,6 +51,12 @@ class ChatBoatRoutes:
         return request.client.host if request.client else "unknown"
 
     def _enforce_rate_limit(self, client_ip: str) -> None:
+        now = time.time()
+        last_reset = self._ip_last_sent_at.get(client_ip, 0)
+        if now - last_reset >= RATE_WINDOW_SECONDS:
+            self._ip_message_counts[client_ip] = 0
+            self._ip_last_sent_at[client_ip] = now
+
         count = self._ip_message_counts.get(client_ip, 0)
         if count >= MAX_MESSAGES_PER_IP:
             raise HTTPException(

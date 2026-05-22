@@ -1,3 +1,4 @@
+import asyncio
 import pytest
 from fastapi import HTTPException
 
@@ -22,7 +23,7 @@ def test_send_message():
     mock_request.client.host = "127.0.0.1"
     body = ChatRequest(message="hello", history=[])
 
-    result = routes.send_message(mock_request, body)
+    result = asyncio.run(routes.send_message(mock_request, body))
 
     mock_app.send_message.assert_called_once_with("hello", [])
     assert result.status_code == 200
@@ -45,7 +46,7 @@ def test_send_message_rejects_long_message():
     body = ChatRequest(message="a" * 401, history=[])
 
     with pytest.raises(HTTPException) as exc:
-        routes.send_message(mock_request, body)
+        asyncio.run(routes.send_message(mock_request, body))
 
     assert exc.value.status_code == 400
     assert exc.value.detail == "Message too long"
@@ -59,11 +60,13 @@ def test_send_message_rejects_when_rate_limit_reached(monkeypatch):
     mock_request.client.host = "127.0.0.1"
     body = ChatRequest(message="hello", history=[])
 
-    for _ in range(chatboat.MAX_MESSAGES_PER_IP):
-        routes.send_message(mock_request, body)
+    async def exhaust_limit():
+        for _ in range(chatboat.MAX_MESSAGES_PER_IP):
+            await routes.send_message(mock_request, body)
+        await routes.send_message(mock_request, body)
 
     with pytest.raises(HTTPException) as exc:
-        routes.send_message(mock_request, body)
+        asyncio.run(exhaust_limit())
 
     assert exc.value.status_code == 429
     assert exc.value.detail["message"] == "Message limit reached"
@@ -82,6 +85,6 @@ def test_send_message_trims_history():
         history=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     )
 
-    routes.send_message(mock_request, body)
+    asyncio.run(routes.send_message(mock_request, body))
 
     mock_app.send_message.assert_called_once_with("hello", [3, 4, 5, 6, 7, 8, 9, 10])
