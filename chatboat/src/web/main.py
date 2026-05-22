@@ -19,7 +19,8 @@ app = _build_webserver().get_app()
 reload = os.getenv("ENV", "production") != "production"
 
 def main() -> None:
-    uvicorn.run("src.web.main:app", host="0.0.0.0", port=int(os.getenv("PORT", 8000)), reload=reload)
+    workers = 1 if reload else 2
+    uvicorn.run("src.web.main:app", host="0.0.0.0", port=int(os.getenv("PORT", 8000)), reload=reload, workers=workers)
 
 if __name__ == "__main__":
     main()
