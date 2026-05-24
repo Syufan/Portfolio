@@ -39,7 +39,6 @@ export default function VisualSearchPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
 
-  // warm up HF Space on mount
   useEffect(() => {
     setStatus("warming");
     fetch("/api/visual-search").finally(() => setStatus("idle"));
@@ -54,7 +53,7 @@ export default function VisualSearchPage() {
     form.append("file", file);
 
     try {
-      const res = await fetch("/api/visual-search?k=8", {
+      const res = await fetch("/api/visual-search?k=3", {
         method: "POST",
         body: form,
       });
@@ -104,29 +103,24 @@ export default function VisualSearchPage() {
       </Link>
 
       {/* header */}
-      <div className="mt-8 max-w-2xl">
-        <h1 className="text-4xl lg:text-5xl font-bold text-white leading-tight">
+      <div className="mt-8">
+        <h1 className="text-4xl lg:text-5xl font-bold text-white leading-tight tracking-tight">
           Does this look like that?
         </h1>
-        <p className="mt-4 text-slate-400 text-base leading-relaxed">
-          Upload any image and this model finds the most visually similar ones
-          from a 2,000-image gallery — spanning faces, shapes, textures, and
-          abstract resemblance. Powered by CLIP ViT-B/32 fine-tuned with LoRA.
+        <p className="mt-6 text-xl lg:text-2.8xl text-slate-300 font-medium leading-snug">
+          Everything has a twin. Find yours!
         </p>
       </div>
 
       {/* example images */}
-      <div className="mt-12">
-        <p className="text-xs font-medium tracking-widest uppercase text-slate-400 mb-4">
-          Try an example
-        </p>
-        <div className="flex gap-4 flex-wrap">
+      <div className="mt-8 inline-flex flex-col">
+        <div className="flex gap-4">
           {examples.map((name) => (
             <button
               key={name}
               disabled={busy}
               onClick={() => searchByUrl(galleryUrl(name), name)}
-              className="group relative w-28 h-28 rounded-lg overflow-hidden ring-1 ring-slate-700 hover:ring-teal-400 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="mt-3 group relative w-44 h-44 rounded-lg overflow-hidden ring-1 ring-slate-700 hover:ring-teal-400 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -138,10 +132,13 @@ export default function VisualSearchPage() {
             </button>
           ))}
         </div>
+          <span className="mt-6 text-right text-slate-600 text-xs font-mono">
+            — Powered by CLIP ViT-B/32 + LoRA · 2,000-image gallery
+          </span>
       </div>
 
       {/* divider */}
-      <div className="mt-10 flex items-center gap-4 max-w-md">
+      <div className="mt-6 flex items-center gap-4 max-w-md">
         <div className="flex-1 h-px bg-slate-700" />
         <span className="text-slate-500 text-sm">or upload your own</span>
         <div className="flex-1 h-px bg-slate-700" />
@@ -195,7 +192,6 @@ export default function VisualSearchPage() {
             Visual matches
           </p>
           <div className="flex flex-col lg:flex-row gap-8">
-            {/* query */}
             <div className="shrink-0">
               <p className="text-slate-500 text-xs mb-2">Your image</p>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -206,30 +202,26 @@ export default function VisualSearchPage() {
               />
             </div>
 
-            {/* results grid */}
             <div className="flex-1">
               {status === "searching" ? (
-                <div className="grid grid-cols-4 lg:grid-cols-8 gap-3">
-                  {Array.from({ length: 8 }).map((_, i) => (
-                    <div
-                      key={i}
-                      className="w-full aspect-square rounded-lg bg-slate-800 animate-pulse"
-                    />
+                <div className="flex gap-4">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="w-44 h-44 rounded-lg bg-slate-800 animate-pulse shrink-0" />
                   ))}
                 </div>
               ) : (
-                <div className="grid grid-cols-4 lg:grid-cols-8 gap-3">
+                <div className="flex gap-4">
                   {results.map((r) => (
-                    <div key={r.rank} className="group relative">
+                    <div key={r.rank} className="group relative w-44 h-44 shrink-0">
                       {r.image_url ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
                           src={r.image_url}
                           alt={`match ${r.rank}`}
-                          className="w-full aspect-square object-cover rounded-lg ring-1 ring-slate-700"
+                          className="w-full h-full object-cover rounded-lg ring-1 ring-slate-700"
                         />
                       ) : (
-                        <div className="w-full aspect-square rounded-lg bg-slate-800" />
+                        <div className="w-full h-full rounded-lg bg-slate-800" />
                       )}
                       <div className="absolute inset-0 flex items-end justify-center pb-1 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
                         <span className="text-xs text-white bg-slate-900/80 rounded px-1 py-0.5">
@@ -258,6 +250,8 @@ export default function VisualSearchPage() {
           )}
         </div>
       )}
-    </div>
+
+
+</div>
   );
 }
