@@ -7,9 +7,36 @@ const HF_DATASET =
   "https://huggingface.co/datasets/Yufanjeff/tll-images/resolve/main/right";
 
 const GALLERY_POOL = [
-  "osr","ojm","ofq","lej","yug","qtp","rzf","unp","baq","box",
-  "yfk","ogx","jub","xft","xii","uax","ohf","vac","gvn","ldg",
-  "vvo","kya","edv","lmt","gdk","kai","fcp","orh","rhj","gfs",
+  "osr",
+  "ojm",
+  "ofq",
+  "lej",
+  "yug",
+  "qtp",
+  "rzf",
+  "unp",
+  "baq",
+  "box",
+  "yfk",
+  "ogx",
+  "jub",
+  "xft",
+  "xii",
+  "uax",
+  "ohf",
+  "vac",
+  "gvn",
+  "ldg",
+  "vvo",
+  "kya",
+  "edv",
+  "lmt",
+  "gdk",
+  "kai",
+  "fcp",
+  "orh",
+  "rhj",
+  "gfs",
 ];
 
 function galleryUrl(name: string) {
@@ -61,7 +88,14 @@ export default function VisualSearchPage() {
       const data = await res.json();
       setResults(data.results ?? []);
       setStatus("done");
-      setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
+      setTimeout(
+        () =>
+          resultsRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          }),
+        100,
+      );
     } catch {
       setStatus("error");
     }
@@ -98,7 +132,9 @@ export default function VisualSearchPage() {
         href="/projects"
         className="text-teal-300 text-base flex items-center gap-1 group transition-colors duration-150"
       >
-        <span className="inline-block transition-transform duration-150 group-hover:-translate-x-1.5">←</span>
+        <span className="inline-block transition-transform duration-150 group-hover:-translate-x-1.5">
+          ←
+        </span>
         All Projects
       </Link>
 
@@ -132,9 +168,9 @@ export default function VisualSearchPage() {
             </button>
           ))}
         </div>
-          <span className="mt-6 text-right text-slate-600 text-xs font-mono">
-            — Powered by CLIP ViT-B/32 + LoRA · 2,000-image gallery
-          </span>
+        <span className="mt-6 text-right text-slate-600 text-xs font-mono">
+          — Powered by CLIP ViT-B/32 + LoRA · 2,000-image gallery
+        </span>
       </div>
 
       {/* divider */}
@@ -152,17 +188,16 @@ export default function VisualSearchPage() {
             : "border-slate-700 hover:border-slate-500"
         } ${busy ? "pointer-events-none opacity-40" : ""}`}
         onClick={() => fileInputRef.current?.click()}
-        onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDragging(true);
+        }}
         onDragLeave={() => setDragging(false)}
         onDrop={handleDrop}
       >
         <div className="py-10 flex flex-col items-center gap-3 text-center px-6">
           <div className="text-3xl">
-            {busy ? (
-              <span className="inline-block animate-spin">↻</span>
-            ) : (
-              "↑"
-            )}
+            {busy ? <span className="inline-block animate-spin">↻</span> : "↑"}
           </div>
           <p className="text-slate-300 text-sm">
             {busy ? "Searching…" : "Drop an image or click to browse"}
@@ -182,7 +217,10 @@ export default function VisualSearchPage() {
         <p className="mt-3 text-slate-500 text-xs">Waking up the model…</p>
       )}
       {status === "error" && (
-        <p className="mt-3 text-red-400 text-xs">Something went wrong. The model may be starting up — try again in a moment.</p>
+        <p className="mt-3 text-red-400 text-xs">
+          Something went wrong. The model may be starting up — try again in a
+          moment.
+        </p>
       )}
 
       {/* results */}
@@ -206,13 +244,19 @@ export default function VisualSearchPage() {
               {status === "searching" ? (
                 <div className="flex gap-4">
                   {Array.from({ length: 3 }).map((_, i) => (
-                    <div key={i} className="w-44 h-44 rounded-lg bg-slate-800 animate-pulse shrink-0" />
+                    <div
+                      key={i}
+                      className="w-44 h-44 rounded-lg bg-slate-800 animate-pulse shrink-0"
+                    />
                   ))}
                 </div>
               ) : (
                 <div className="flex gap-4">
                   {results.map((r) => (
-                    <div key={r.rank} className="group relative w-44 h-44 shrink-0">
+                    <div
+                      key={r.rank}
+                      className="group relative w-44 h-44 shrink-0"
+                    >
                       {r.image_url ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
@@ -250,8 +294,6 @@ export default function VisualSearchPage() {
           )}
         </div>
       )}
-
-
-</div>
+    </div>
   );
 }

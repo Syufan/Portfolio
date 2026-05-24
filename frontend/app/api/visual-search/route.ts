@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     if (!res.ok) {
       return NextResponse.json(
         { error: "Search failed" },
-        { status: res.status }
+        { status: res.status },
       );
     }
 

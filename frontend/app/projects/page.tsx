@@ -9,13 +9,21 @@ import Link from "next/link";
 function LiveLink({ href, size }: { href: string; size: number }) {
   if (href.startsWith("/")) {
     return (
-      <Link href={href} className="text-slate-400 hover:text-teal-300 transition-colors duration-150">
+      <Link
+        href={href}
+        className="text-slate-400 hover:text-teal-300 transition-colors duration-150"
+      >
         <FiGlobe size={size} />
       </Link>
     );
   }
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-teal-300 transition-colors duration-150">
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-slate-400 hover:text-teal-300 transition-colors duration-150"
+    >
       <FiGlobe size={size} />
     </a>
   );
@@ -70,7 +78,9 @@ export default async function ProjectsPage() {
               </td>
               <td className="py-4 max-w-xs">
                 <div className="flex flex-wrap items-center gap-3">
-                  {project.url.live && <LiveLink href={project.url.live} size={25} />}
+                  {project.url.live && (
+                    <LiveLink href={project.url.live} size={25} />
+                  )}
                   {project.url.github && (
                     <a
                       href={project.url.github}
@@ -96,7 +106,9 @@ export default async function ProjectsPage() {
             <div className="flex items-center justify-between mt-2">
               <p className="text-white font-semibold">{project.name}</p>
               <div className="flex gap-3">
-                {project.url.live && <LiveLink href={project.url.live} size={20} />}
+                {project.url.live && (
+                  <LiveLink href={project.url.live} size={20} />
+                )}
                 {project.url.github && (
                   <a
                     href={project.url.github}
