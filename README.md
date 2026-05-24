@@ -1,11 +1,14 @@
 # Portfolio
-A full-stack portfolio website built with Next.js, Spring Boot, and a FastAPI-based chatbot, deployed across Vercel, AWS EC2, and Railway.
+
+A full-stack portfolio site built with Next.js and Spring Boot, deployed to AWS EC2 with a complete CI/CD pipeline. Includes an interactive Visual Similarity Search demo powered by a CLIP + LoRA model hosted on Hugging Face Spaces.
+
 
 ## Overview
 This project is my personal portfolio site. It includes:
 
 - a responsive frontend built with Next.js
 - a Spring Boot backend serving portfolio data
+- an interactive Visual Similarity Search demo powered by CLIP + LoRA
 - an AI chatbot service for interactive portfolio Q&A
 - CI/CD pipelines for automated build and deployment
 - Cloudflare for DNS and traffic routing
@@ -15,9 +18,9 @@ This project is my personal portfolio site. It includes:
 
 - Frontend: Next.js, TypeScript, Tailwind CSS, DaisyUI
 - Backend: Spring Boot, Java
-- Chatbot: FastAPI, Python, OpenAI API
-- Testing: JUnit 5, Mockito, Jest, React Testing Library, Pytest
-- Deployment: Vercel, AWS EC2, Railway, Docker, GitHub Actions, Cloudflare, AWS S3
+- AI/ML: CLIP ViT-B/32, LoRA, Hugging Face Spaces
+- Testing: JUnit 5, Mockito, Jest, React Testing Library
+- Deployment: Vercel, AWS EC2, Docker, GitHub Actions, Cloudflare, AWS S3
 
 ## Architecture
 ```
@@ -25,6 +28,7 @@ Browser → Cloudflare → jeffzhang.dev → Vercel (Next.js)
 Browser → Cloudflare → api.jeffzhang.dev → EC2 (Spring Boot)
 Browser → chat.jeffzhang.dev → Railway (FastAPI chatbot)
 Resume PDF → AWS S3
+/visual-search → Next.js API route → Hugging Face Spaces (CLIP + LoRA)
 ```
 
 ## Local Development
@@ -64,7 +68,3 @@ App runs on http://localhost:8000
 <img width="1360" height="777" alt="image" src="https://github.com/user-attachments/assets/bc51b5b7-9938-451a-9b13-d702d7070925" />
 <img width="1360" height="777" alt="image" src="https://github.com/user-attachments/assets/97dad0fd-a7ec-443e-8975-8fac4718a558" />
 <img width="1360" height="777" alt="image" src="https://github.com/user-attachments/assets/bd57cd5b-8ae9-465f-8208-635af2e8451b" />
-
-
-
-
