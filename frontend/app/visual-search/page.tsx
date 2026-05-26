@@ -66,6 +66,7 @@ export default function VisualSearchPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const searchIdRef = useRef(0);
 
   useEffect(() => {
     setStatus("warming");
@@ -109,13 +110,20 @@ export default function VisualSearchPage() {
   }
 
   async function searchByUrl(url: string, name: string) {
+    const id = ++searchIdRef.current;
+    setStatus("searching");
+    setQueryPreview(url);
+    setResults([]);
+
     try {
       const res = await fetch(url);
       if (!res.ok) throw new Error();
       const blob = await res.blob();
+      if (id !== searchIdRef.current) return;
       const file = new File([blob], `${name}.jpg`, { type: "image/jpeg" });
       await runSearch(file, url);
     } catch {
+      if (id !== searchIdRef.current) return;
       setStatus("error");
     }
   }
