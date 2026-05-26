@@ -58,7 +58,7 @@ interface SearchResult {
 type Status = "idle" | "warming" | "searching" | "done" | "error";
 
 export default function VisualSearchPage() {
-  const [examples] = useState(() => pickRandom(GALLERY_POOL, 3));
+  const [examples, setExamples] = useState<string[]>([]);
   const [status, setStatus] = useState<Status>("idle");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [queryPreview, setQueryPreview] = useState<string | null>(null);
@@ -69,6 +69,7 @@ export default function VisualSearchPage() {
   const searchIdRef = useRef(0);
 
   useEffect(() => {
+    setExamples(pickRandom(GALLERY_POOL, 3));
     setStatus("warming");
     fetch("/api/visual-search").finally(() => setStatus("idle"));
   }, []);
