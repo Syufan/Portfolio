@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Chatbot from "@/components/Chatbot";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Jeff Zhang - Full Stack AI Engineer",

@@ -65,14 +65,19 @@ export default function VisualSearchPage() {
   const [dragging, setDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     setStatus("warming");
     fetch("/api/visual-search").finally(() => setStatus("idle"));
   }, []);
 
-  async function runSearch(file: File) {
-    setQueryPreview(URL.createObjectURL(file));
+  async function runSearch(file: File, preview: string) {
+    abortRef.current?.abort();
+    abortRef.current = new AbortController();
+    const { signal } = abortRef.current;
+
+    setQueryPreview(preview);
     setStatus("searching");
     setResults([]);
 
@@ -83,6 +88,7 @@ export default function VisualSearchPage() {
       const res = await fetch("/api/visual-search?k=3", {
         method: "POST",
         body: form,
+        signal,
       });
       if (!res.ok) throw new Error();
       const data = await res.json();
@@ -96,25 +102,28 @@ export default function VisualSearchPage() {
           }),
         100,
       );
-    } catch {
+    } catch (e: unknown) {
+      if (e instanceof DOMException && e.name === "AbortError") return;
       setStatus("error");
     }
   }
 
   async function searchByUrl(url: string, name: string) {
-    setStatus("searching");
-    setQueryPreview(url);
-    setResults([]);
-
-    const res = await fetch(url);
-    const blob = await res.blob();
-    const file = new File([blob], `${name}.jpg`, { type: "image/jpeg" });
-    await runSearch(file);
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error();
+      const blob = await res.blob();
+      const file = new File([blob], `${name}.jpg`, { type: "image/jpeg" });
+      await runSearch(file, url);
+    } catch {
+      setStatus("error");
+    }
   }
 
   function handleFiles(files: FileList | null) {
     if (!files?.length) return;
-    runSearch(files[0]);
+    const file = files[0];
+    runSearch(file, URL.createObjectURL(file));
   }
 
   const handleDrop = useCallback((e: React.DragEvent) => {
@@ -156,7 +165,7 @@ export default function VisualSearchPage() {
               key={name}
               disabled={busy}
               onClick={() => searchByUrl(galleryUrl(name), name)}
-              className="mt-3 group relative w-44 h-44 rounded-lg overflow-hidden ring-1 ring-slate-700 hover:ring-teal-400 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="mt-3 group relative w-24 h-24 sm:w-36 sm:h-36 lg:w-44 lg:h-44 rounded-lg overflow-hidden ring-1 ring-slate-700 hover:ring-teal-400 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -246,7 +255,7 @@ export default function VisualSearchPage() {
                   {Array.from({ length: 3 }).map((_, i) => (
                     <div
                       key={i}
-                      className="w-44 h-44 rounded-lg bg-slate-800 animate-pulse shrink-0"
+                      className="w-24 h-24 sm:w-36 sm:h-36 lg:w-44 lg:h-44 rounded-lg bg-slate-800 animate-pulse shrink-0"
                     />
                   ))}
                 </div>
@@ -255,7 +264,7 @@ export default function VisualSearchPage() {
                   {results.map((r) => (
                     <div
                       key={r.rank}
-                      className="group relative w-44 h-44 shrink-0"
+                      className="group relative w-24 h-24 sm:w-36 sm:h-36 lg:w-44 lg:h-44 shrink-0"
                     >
                       {r.image_url ? (
                         // eslint-disable-next-line @next/next/no-img-element
