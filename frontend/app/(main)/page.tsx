@@ -4,6 +4,7 @@ import { createProfileService } from "@/services/profile";
 import { Experience } from "@/types";
 import Link from "next/link";
 import ResumeButton from "@/components/ResumeButton";
+
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
@@ -29,7 +30,7 @@ export default async function Home() {
         <h2 className="text-xs font-medium tracking-widest uppercase text-white mb-6 lg:hidden">
           Experience
         </h2>
-        {data.experience.map((experience: Experience, i: number) => (
+        {data.experience.map((experience: Experience, i: number) =>
           experience.url ? (
             <a
               key={i}

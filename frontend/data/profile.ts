@@ -49,7 +49,14 @@ export const profileData: ProfileData = {
       year: "2024",
       description:
         "Web-based patient management application supporting daily workflows for patients and clinicians.",
-      techStack: ["Node.js", "Express", "JavaScript", "MongoDB", "Azure", "AWS"],
+      techStack: [
+        "Node.js",
+        "Express",
+        "JavaScript",
+        "MongoDB",
+        "Azure",
+        "AWS",
+      ],
       url: {
         github:
           "https://github.com/Syufan/Dev-Portfolio/tree/main/FullStack_Projects/WebLife-Diabetes",
