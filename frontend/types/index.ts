@@ -1,8 +1,15 @@
+export interface About {
+  name: string;
+  title: string;
+  tagline: string;
+  paragraphs: string[];
+}
+
 export interface Experience {
   period: string;
   company: string;
   role: string;
-  url: string;
+  url?: string;
   bullets: string[];
   techStack: string[];
 }
@@ -18,12 +25,12 @@ export interface Project {
   };
 }
 
+export interface ProfileData {
+  about: About;
+  experience: Experience[];
+  projects: Project[];
+}
+
 export interface SidebarProps {
-  data: {
-    about: {
-      name: string;
-      title: string;
-      tagline: string;
-    };
-  };
+  data: Pick<ProfileData, "about">;
 }

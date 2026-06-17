@@ -1,5 +1,5 @@
-import { getProjects } from "@/services/api";
-import { getProfile } from "@/services/api";
+import { profileData } from "@/data/profile";
+import { createProfileService } from "@/services/profile";
 import { Project } from "@/types";
 import { FaGithub } from "react-icons/fa";
 import { FiGlobe } from "react-icons/fi";
@@ -31,7 +31,11 @@ function LiveLink({ href, size }: { href: string; size: number }) {
 export const dynamic = "force-dynamic";
 
 export default async function ProjectsPage() {
-  const [projects, data] = await Promise.all([getProjects(), getProfile()]);
+  const profileService = createProfileService(profileData);
+  const [projects, data] = await Promise.all([
+    profileService.getProjects(),
+    profileService.getProfile(),
+  ]);
 
   return (
     <div className="py-16 px-6 lg:px-20 min-h-screen bg-slate-900">

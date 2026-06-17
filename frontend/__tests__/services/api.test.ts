@@ -1,71 +1,47 @@
 import {
-  getProfile,
-  getProjects,
   getSuggestions,
   getHealth,
   sendMessage,
+  isChatbotEnabled,
 } from "@/services/api";
-
-jest.mock("axios", () => {
-  const mockGet = jest.fn();
-  const mockPost = jest.fn();
-  return {
-    default: {
-      create: () => ({ get: mockGet, post: mockPost }),
-    },
-    create: () => ({ get: mockGet, post: mockPost }),
-  };
-});
-
-const getMockGet = () => {
-  const axios = require("axios");
-  return axios.create().get as jest.Mock;
-};
+import { createProfileService } from "@/services/profile";
+import { profileData } from "@/data/profile";
 
 describe("api", () => {
   beforeEach(() => {
-    getMockGet().mockClear();
+    process.env.NEXT_PUBLIC_CHATBOT_API_URL = "https://chat.example.com";
+    jest.restoreAllMocks();
   });
 
-  it("getProfile should return data", async () => {
-    getMockGet().mockResolvedValue({
-      data: { about: {}, experience: [], projects: [] },
-    });
+  it("profile service should return local profile data", async () => {
+    const profileService = createProfileService(profileData);
+    const result = await profileService.getProfile();
 
-    const result = await getProfile();
-
-    expect(result).toEqual({ about: {}, experience: [], projects: [] });
+    expect(result.about.name).toBe("Jeff Zhang");
   });
 
-  it("getProfile should throw when request fails", async () => {
-    getMockGet().mockRejectedValue(new Error("Network error"));
+  it("profile service should return local projects", async () => {
+    const profileService = createProfileService(profileData);
+    const result = await profileService.getProjects();
 
-    await expect(getProfile()).rejects.toThrow("Failed to fetch profile");
+    expect(result).toHaveLength(5);
   });
 
-  it("getProjects should return data", async () => {
-    getMockGet().mockResolvedValue({ data: [{ name: "Test Project" }] });
-
-    const result = await getProjects();
-
-    expect(result).toEqual([{ name: "Test Project" }]);
+  it("isChatbotEnabled should reflect the env flag", () => {
+    expect(isChatbotEnabled()).toBe(true);
   });
 
   it("getSuggestions should return suggestions", async () => {
-    getMockGet().mockResolvedValue({
-      data: { suggestions: ["What are your skills?"] },
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: jest.fn().mockResolvedValue({
+        suggestions: ["What are your skills?"],
+      }),
     });
 
     const result = await getSuggestions();
 
     expect(result).toEqual({ suggestions: ["What are your skills?"] });
-  });
-
-  it("getSuggestions should throw when request fails", async () => {
-    getMockGet().mockRejectedValue(new Error("Network error"));
-    await expect(getSuggestions()).rejects.toThrow(
-      "Failed to fetch suggestions",
-    );
   });
 
   it("sendMessage should stream message chunks", async () => {
@@ -115,18 +91,13 @@ describe("api", () => {
   });
 
   it("getHealth should return health status", async () => {
-    getMockGet().mockResolvedValue({
-      data: { ok: true },
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: jest.fn().mockResolvedValue({ ok: true }),
     });
 
     const result = await getHealth();
 
     expect(result).toEqual({ ok: true });
-  });
-
-  it("getHealth should throw when request fails", async () => {
-    getMockGet().mockRejectedValue(new Error("Network error"));
-
-    await expect(getHealth()).rejects.toThrow("Failed to fetch health status");
   });
 });

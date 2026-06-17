@@ -1,13 +1,13 @@
 # Portfolio
 
-A full-stack portfolio site built with Next.js and Spring Boot, deployed to AWS EC2 with a complete CI/CD pipeline. Includes an interactive Visual Similarity Search demo powered by a CLIP + LoRA model hosted on Hugging Face Spaces.
+A portfolio site built with Next.js. The main profile content is served from the frontend, the visual search demo is still powered by Hugging Face Spaces, and the chatbot stays live on Railway.
 
 
 ## Overview
 This project is my personal portfolio site. It includes:
 
 - a responsive frontend built with Next.js
-- a Spring Boot backend serving portfolio data
+- local profile/project data bundled with the frontend
 - an interactive Visual Similarity Search demo powered by CLIP + LoRA
 - an AI chatbot service for interactive portfolio Q&A
 - CI/CD pipelines for automated build and deployment
@@ -17,15 +17,14 @@ This project is my personal portfolio site. It includes:
 ## Tech Stack
 
 - Frontend: Next.js, TypeScript, Tailwind CSS, DaisyUI
-- Backend: Spring Boot, Java
+- Backend: Spring Boot, Java, FastAPI
 - AI/ML: CLIP ViT-B/32, LoRA, Hugging Face Spaces
 - Testing: JUnit 5, Mockito, Jest, React Testing Library
-- Deployment: Vercel, AWS EC2, Docker, GitHub Actions, Cloudflare, AWS S3
+- Deployment: Vercel, Docker, GitHub Actions, Cloudflare, AWS S3
 
 ## Architecture
 ```
 Browser → Cloudflare → jeffzhang.dev → Vercel (Next.js)
-Browser → Cloudflare → api.jeffzhang.dev → EC2 (Spring Boot)
 Browser → chat.jeffzhang.dev → Railway (FastAPI chatbot)
 Resume PDF → AWS S3
 /visual-search → Next.js API route → Hugging Face Spaces (CLIP + LoRA)
