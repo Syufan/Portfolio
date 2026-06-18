@@ -30,8 +30,43 @@ export default async function Home() {
         <h2 className="text-xs font-medium tracking-widest uppercase text-white mb-6 lg:hidden">
           Experience
         </h2>
-        {data.experience.map((experience: Experience, i: number) =>
-          experience.url ? (
+        {data.experience.map((experience: Experience, i: number) => {
+          const content = (
+            <>
+              <p className="text-slate-400 text-sm lg:w-40 lg:shrink-0 pt-0.5">
+                {experience.period}
+              </p>
+
+              <div>
+                <h3
+                  className={`flex items-center gap-1 ${experience.url ? "text-white group-hover:text-teal-300 transition-colors duration-150" : "text-white"}`}
+                >
+                  {experience.role} · {experience.company}
+                  {experience.url ? (
+                    <span className="inline-block transition-transform duration-150 group-hover:-translate-y-1 group-hover:translate-x-1">
+                      ↗
+                    </span>
+                  ) : null}
+                </h3>
+
+                <ul className="mt-4 flex flex-col gap-2">
+                  {experience.bullets.map((bullet, j) => (
+                    <li key={j} className="text-slate-400 text-sm">
+                      {bullet}
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="flex gap-2 mt-4 flex-wrap">
+                  {experience.techStack.map((tech, k) => (
+                    <TechBadge key={k} tech={tech} />
+                  ))}
+                </div>
+              </div>
+            </>
+          );
+
+          return experience.url ? (
             <a
               key={i}
               href={experience.url}
@@ -39,64 +74,17 @@ export default async function Home() {
               rel="noopener noreferrer"
               className="flex flex-col lg:flex-row gap-1 mb-4 p-4 -mx-4 rounded-lg transition-all duration-200 hover:bg-slate-800/50 group"
             >
-              <p className="text-slate-400 text-sm lg:w-40 lg:shrink-0 pt-0.5">
-                {experience.period}
-              </p>
-
-              <div>
-                <h3 className="text-white group-hover:text-teal-300 transition-colors duration-150 flex items-center gap-1">
-                  {experience.role} · {experience.company}
-                  <span className="inline-block transition-transform duration-150 group-hover:-translate-y-1 group-hover:translate-x-1">
-                    ↗
-                  </span>
-                </h3>
-
-                <ul className="mt-4 flex flex-col gap-2">
-                  {experience.bullets.map((bullet, j) => (
-                    <li key={j} className="text-slate-400 text-sm">
-                      {bullet}
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="flex gap-2 mt-4 flex-wrap">
-                  {experience.techStack.map((tech, k) => (
-                    <TechBadge key={k} tech={tech} />
-                  ))}
-                </div>
-              </div>
+              {content}
             </a>
           ) : (
             <div
               key={i}
               className="flex flex-col lg:flex-row gap-1 mb-4 p-4 -mx-4 rounded-lg"
             >
-              <p className="text-slate-400 text-sm lg:w-40 lg:shrink-0 pt-0.5">
-                {experience.period}
-              </p>
-
-              <div>
-                <h3 className="text-white flex items-center gap-1">
-                  {experience.role} · {experience.company}
-                </h3>
-
-                <ul className="mt-4 flex flex-col gap-2">
-                  {experience.bullets.map((bullet, j) => (
-                    <li key={j} className="text-slate-400 text-sm">
-                      {bullet}
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="flex gap-2 mt-4 flex-wrap">
-                  {experience.techStack.map((tech, k) => (
-                    <TechBadge key={k} tech={tech} />
-                  ))}
-                </div>
-              </div>
+              {content}
             </div>
-          )
-        ))}
+          );
+        })}
       </section>
 
       <section id="projects" className="-mt-20">
