@@ -35,7 +35,15 @@ export const profileData: ProfileData = {
       year: "2026",
       description:
         "End-to-end visual retrieval system: CLIP ViT-B/32 fine-tuned with LoRA, served via FastAPI, indexed with FAISS. AUC 0.925, MAP@10 0.71. Deployed on Hugging Face Spaces with GitHub Actions CI/CD.",
-      techStack: ["Python", "PyTorch", "CLIP", "LoRA", "FAISS", "FastAPI", "Docker"],
+      techStack: [
+        "Python",
+        "PyTorch",
+        "CLIP",
+        "LoRA",
+        "FAISS",
+        "FastAPI",
+        "Docker",
+      ],
       url: {
         github: "https://github.com/Syufan/visual-similarity-search",
         live: "/visual-search",
@@ -63,7 +71,14 @@ export const profileData: ProfileData = {
       year: "2026",
       description:
         "Climate fact-checking pipeline: BM25 retrieval over 100k corpus, Bi-Encoder reranker trained with InfoNCE + hard negatives, Co-Attention verifier for 3-way classification. Built without pretrained models.",
-      techStack: ["Python", "PyTorch", "Transformer", "InfoNCE", "BM25", "Word2Vec"],
+      techStack: [
+        "Python",
+        "PyTorch",
+        "Transformer",
+        "InfoNCE",
+        "BM25",
+        "Word2Vec",
+      ],
       url: {
         github:
           "https://github.com/Syufan/Dev-Portfolio/tree/main/ML_Projects/Claim%20Verification",
@@ -96,7 +111,14 @@ export const profileData: ProfileData = {
       year: "2024",
       description:
         "E-commerce backend built with four .NET Core microservices including Catalog, Basket, Discount, and Ordering, connected via RabbitMQ event-driven architecture with Redis caching.",
-      techStack: [".NET Core", "PostgreSQL", "Redis", "RabbitMQ", "EF Core", "Docker"],
+      techStack: [
+        ".NET Core",
+        "PostgreSQL",
+        "Redis",
+        "RabbitMQ",
+        "EF Core",
+        "Docker",
+      ],
       url: {
         github:
           "https://github.com/Syufan/Dev-Portfolio/tree/main/FullStack_Projects/MyMicroservice",
