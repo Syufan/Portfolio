@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Sidebar from "@/components/Sidebar";
-import { getProfile } from "@/services/api";
+import { profileData } from "@/data/profile";
+import { createProfileService } from "@/services/profile";
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
-    const data = await getProfile();
+    const profileService = createProfileService(profileData);
+    const data = await profileService.getProfile();
     return {
       title: data.about.name,
       description: data.about.title,
@@ -25,7 +27,8 @@ export default async function MainLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const data = await getProfile();
+  const profileService = createProfileService(profileData);
+  const data = await profileService.getProfile();
   return (
     <div className="max-w-6xl mx-auto flex flex-col lg:flex-row">
       <Sidebar data={data} />
